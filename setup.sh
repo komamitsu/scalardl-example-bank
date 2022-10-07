@@ -2,10 +2,10 @@
 
 set -euxo pipefail
 
+rm -rf certs
 mkdir -p certs
 
 pushd certs
-
 cat << EOF > client-cert.json
 {
     "CN": "client.example",
@@ -24,5 +24,7 @@ cat << EOF > client-cert.json
 }
 EOF
 cfssl selfsign "" ./client-cert.json | cfssljson -bare client
-
 pushd
+
+cat client.properties.tmpl | envsubst > client.properties
+
